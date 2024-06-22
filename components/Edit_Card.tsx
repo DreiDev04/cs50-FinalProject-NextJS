@@ -31,33 +31,19 @@ import {
 } from "@/components/ui/select";
 
 import { categories } from "@/components/categories";
+import { IProduct } from "@/models/Product";
+import { Button } from "@/components/ui/button";
 
 type CategoryKey = keyof typeof categories;
 
 type Product_CardProps = {
   open: boolean;
   setOpen: (open: boolean) => void;
-  button_desc: string;
+  product_id: string;
 };
 
-const MAX_FILE_SIZE = 1024 * 1024 * 5;
-const ACCEPTED_IMAGE_MIME_TYPES = [
-  "image/jpeg",
-  "image/jpg",
-  "image/png",
-  "image/webp",
-];
-
 const FormSchema = z.object({
-  image: z
-    .any()
-    .refine((files) => {
-      return files?.[0]?.size <= MAX_FILE_SIZE;
-    }, `Max image size is 5MB.`)
-    .refine(
-      (files) => ACCEPTED_IMAGE_MIME_TYPES.includes(files?.[0]?.type),
-      "Only .jpg, .jpeg, .png and .webp formats are supported."
-    ),
+  image: z.string().optional(),
   product_name: z.string().min(1, { message: "Please enter a product name" }),
   category: z.string().min(1, { message: "Please select a sub category" }),
   sub_category: z.string().min(1, { message: "Please select a category" }),
@@ -68,12 +54,11 @@ const FormSchema = z.object({
     .min(1, { message: "Please enter the selling price" }),
 });
 
-const Product_Card = ({ open, setOpen, button_desc }: Product_CardProps) => {
-  const [selectedImage, setSelectedImage] = useState<File | null>(null);
-
-  const [selectedCategory, setSelectedCategory] = useState<
-    CategoryKey | null | string
-  >("beverages");
+const Edit_Card = ({ open, setOpen, product_id }: Product_CardProps) => {
+  const [selectedCategory, setSelectedCategory] = useState<CategoryKey | null>(
+    "beverages"
+  );
+  const [productData, setProductData] = useState<IProduct>();
 
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
@@ -88,9 +73,29 @@ const Product_Card = ({ open, setOpen, button_desc }: Product_CardProps) => {
     },
   });
 
+  useEffect(() => {
+    const fetchProductData = async () => {
+      if (open && product_id) {
+        try {
+          const response = await fetch(`/api/products/${product_id}`);
+          if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+          }
+          const data = await response.json();
+          setProductData(data.result);
+          form.reset(data.result); // Update form values with fetched data
+          setSelectedCategory(data.result.category as CategoryKey);
+        } catch (error) {
+          console.error("Fetching product data failed:", error);
+        }
+      }
+    };
+
+    fetchProductData();
+  }, [open, product_id]);
+
   const closeDialog = () => {
-    setSelectedCategory(null);
-    setSelectedImage(null);
+    // setSelectedCategory(null);
     form.reset();
     setOpen(false);
   };
@@ -102,45 +107,7 @@ const Product_Card = ({ open, setOpen, button_desc }: Product_CardProps) => {
   }, [open]);
 
   const onSubmit = async (data: z.infer<typeof FormSchema>) => {
-    const formData = new FormData();
-    formData.append("image", selectedImage || "");
-
-    try {
-      const result = await uploadProduct(null, formData);
-      const response = await fetch("/api/products", {
-        method: "POST",
-        body: JSON.stringify({
-          image_url: result.message,
-          product_name: data.product_name,
-          category: data.category,
-          sub_category: data.sub_category,
-          net_wt: data.net_wt,
-          price: Number(data.price),
-          selling_price: Number(data.selling_price),
-        }),
-      });
-
-      if (response.status === 201) {
-        console.log("Product added successfully: ");
-      } else {
-        console.log("Failed to add product: ", response);
-      }
-
-      toast({
-        title: "You submitted the following values:",
-        description: (
-          <pre className="mt-2 w-[340px] rounded-md bg-slate-950 p-4">
-            <code className="text-white">{JSON.stringify(data, null, 2)}</code>
-          </pre>
-        ),
-      });
-
-      closeDialog();
-
-      // window.location.reload();
-    } catch (error) {
-      console.error("Failed to submit form: ", error);
-    }
+    
   };
 
   const toSentenceCase = (str: string) => {
@@ -151,19 +118,16 @@ const Product_Card = ({ open, setOpen, button_desc }: Product_CardProps) => {
   };
 
   const handleCategoryChange = (value: string) => {
-    setSelectedCategory(value);
+    setSelectedCategory(value as CategoryKey);
     form.setValue("category", value);
+    form.setValue("sub_category", "");
   };
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
-      <DialogContent
-        onInteractOutside={(e) => {
-          e.preventDefault();
-        }}
-      >
+      <DialogContent onInteractOutside={(e) => e.preventDefault()}>
         <DialogHeader>
-          <DialogTitle>{button_desc} Product</DialogTitle>
+          <DialogTitle>Edit Product</DialogTitle>
         </DialogHeader>
         <ScrollArea className="max-h-[500px] w-full p-4">
           <Form {...form}>
@@ -179,16 +143,11 @@ const Product_Card = ({ open, setOpen, button_desc }: Product_CardProps) => {
                     <FormLabel>Image</FormLabel>
                     <FormControl>
                       <Input
-                        type="file"
-                        id="image"
-                        accept="image/*"
-                        onBlur={field.onBlur}
-                        name={field.name}
-                        onChange={(e) => {
-                          field.onChange(e.target.files);
-                          setSelectedImage(e.target.files?.[0] || null);
-                        }}
-                        ref={field.ref}
+                        type="text"
+                        disabled
+                        {...field}
+                        value={field.value || productData?.image_url || ""}
+                        onChange={(e) => field.onChange(e.target.value)}
                       />
                     </FormControl>
                     <FormMessage />
@@ -217,18 +176,15 @@ const Product_Card = ({ open, setOpen, button_desc }: Product_CardProps) => {
                     <FormControl>
                       <Select
                         onValueChange={handleCategoryChange}
+                        value={form.watch("category")}
                         defaultValue={field.value}
                       >
                         <SelectTrigger>
-                          <SelectValue placeholder="Select Category" />
+                          <SelectValue placeholder="Select category" />
                         </SelectTrigger>
                         <SelectContent>
                           {Object.keys(categories).map((category) => (
-                            <SelectItem
-                              key={category}
-                              {...field}
-                              value={category}
-                            >
+                            <SelectItem key={category} value={category}>
                               {toSentenceCase(
                                 category.replace(/_/g, " ").toLowerCase()
                               )}
@@ -249,18 +205,18 @@ const Product_Card = ({ open, setOpen, button_desc }: Product_CardProps) => {
                     <FormItem>
                       <FormLabel>Sub Category</FormLabel>
                       <FormControl>
-                        <Select  onValueChange={field.onChange} defaultValue={field.value}>
+                        <Select
+                          onValueChange={field.onChange}
+                          defaultValue={field.value}
+                          value={form.watch("sub_category")}
+                        >
                           <SelectTrigger>
-                            <SelectValue placeholder="Select Sub Category" />
+                            <SelectValue placeholder="Select sub category" />
                           </SelectTrigger>
                           <SelectContent>
                             {categories[selectedCategory as CategoryKey].map(
                               (category) => (
-                                <SelectItem
-                                  key={category}
-                                  {...field}
-                                  value={category}
-                                >
+                                <SelectItem key={category} value={category}>
                                   {toSentenceCase(
                                     category.replace(/_/g, " ").toLowerCase()
                                   )}
@@ -297,7 +253,7 @@ const Product_Card = ({ open, setOpen, button_desc }: Product_CardProps) => {
                 name="price"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Price.</FormLabel>
+                    <FormLabel>Price</FormLabel>
                     <FormControl>
                       <Input {...field} autoComplete="off" />
                     </FormControl>
@@ -318,7 +274,16 @@ const Product_Card = ({ open, setOpen, button_desc }: Product_CardProps) => {
                   </FormItem>
                 )}
               />
-              <SubmitFormButton button_desc={button_desc} />
+
+              <Button
+                variant={"outline"}
+                onClick={() => {
+                  setOpen(false);
+                }}
+              >
+                Cancel
+              </Button>
+              <Button type="submit">Edit</Button>
             </form>
           </Form>
         </ScrollArea>
@@ -327,4 +292,4 @@ const Product_Card = ({ open, setOpen, button_desc }: Product_CardProps) => {
   );
 };
 
-export default Product_Card;
+export default Edit_Card;

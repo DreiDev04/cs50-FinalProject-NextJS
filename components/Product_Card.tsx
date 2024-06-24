@@ -137,7 +137,7 @@ const Product_Card = ({ open, setOpen, button_desc }: Product_CardProps) => {
 
       closeDialog();
 
-      // window.location.reload();
+      window.location.reload();
     } catch (error) {
       console.error("Failed to submit form: ", error);
     }

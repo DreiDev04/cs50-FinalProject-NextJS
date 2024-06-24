@@ -9,6 +9,16 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+  DialogFooter,
+} from "@/components/ui/dialog";
+
 import { ArrowUpDown, MoreHorizontal } from "lucide-react";
 import { useState } from "react";
 import Edit_Card from "@/components/Edit_Card";
@@ -113,8 +123,8 @@ export const columns: ColumnDef<IProduct>[] = [
       const [open, setOpen] = useState(false);
 
       return (
-        <>
-          <DropdownMenu>
+        <Dialog>
+          <DropdownMenu modal={false}>
             <DropdownMenuTrigger asChild>
               <Button variant="ghost" className="h-8 w-8 p-0">
                 <span className="sr-only">Open menu</span>
@@ -131,16 +141,49 @@ export const columns: ColumnDef<IProduct>[] = [
               <DropdownMenuSeparator />
               <DropdownMenuItem
                 onClick={() => {
-                  setOpen((prev) => !prev);
+                  setOpen(true);
                 }}
+                onSelect={(e) => e.preventDefault()}
               >
                 Edit
               </DropdownMenuItem>
-              <DropdownMenuItem>Delete</DropdownMenuItem>
+              <DialogTrigger asChild>
+                <DropdownMenuItem onSelect={(e) => e.preventDefault()}>
+                  Delete
+                </DropdownMenuItem>
+              </DialogTrigger>
             </DropdownMenuContent>
           </DropdownMenu>
-          <Edit_Card open={open} setOpen={setOpen} product_id={product.id}/>
-        </>
+          <Edit_Card open={open} product_id={product.id} setOpen={setOpen} />
+          <DialogContent aria-describedby="Delete">
+            <DialogHeader>
+              <DialogTitle>Delete {product.product_name} ?</DialogTitle>
+              <DialogDescription>
+                Are you sure you want to delete {product.product_name}? This
+                action cannot be undone.
+              </DialogDescription>
+            </DialogHeader>
+            <DialogFooter>
+              <Button variant="ghost" onClick={() => setOpen(false)}>
+                Cancel
+              </Button>
+              <Button
+                onClick={() => {
+                  setOpen(false);
+                  fetch(`/api/products/${product.id}`, {
+                    method: "DELETE",
+                  }).then((res) => {
+                    if (res.ok) {
+                      window.location.reload();
+                    }
+                  });
+                }}
+              >
+                Confirm
+              </Button>
+            </DialogFooter>
+          </DialogContent>
+        </Dialog>
       );
     },
   },

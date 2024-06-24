@@ -12,6 +12,7 @@
     "@auth/mongodb-adapter": "^3.2.0",
     "@aws-sdk/client-s3": "^3.600.0",
     "@hookform/resolvers": "^3.6.0",
+    "@radix-ui/react-alert-dialog": "^1.1.1",
     "@radix-ui/react-avatar": "^1.0.4",
     "@radix-ui/react-dialog": "^1.0.5",
     "@radix-ui/react-dropdown-menu": "^2.0.6",

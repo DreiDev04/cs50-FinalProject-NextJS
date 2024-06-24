@@ -43,12 +43,12 @@ type Product_CardProps = {
 };
 
 const FormSchema = z.object({
-  image: z.string().optional(),
+  image_url: z.string().optional(),
   product_name: z.string().min(1, { message: "Please enter a product name" }),
   category: z.string().min(1, { message: "Please select a sub category" }),
   sub_category: z.string().min(1, { message: "Please select a category" }),
   net_wt: z.string().min(1, { message: "Please enter the net weight" }),
-  price: z.string().optional(),
+  price: z.string().min(1, { message: "Please enter the price" }),
   selling_price: z
     .string()
     .min(1, { message: "Please enter the selling price" }),
@@ -63,7 +63,7 @@ const Edit_Card = ({ open, setOpen, product_id }: Product_CardProps) => {
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
     defaultValues: {
-      image: "",
+      image_url: "",
       product_name: "",
       category: "",
       sub_category: "",
@@ -107,7 +107,44 @@ const Edit_Card = ({ open, setOpen, product_id }: Product_CardProps) => {
   }, [open]);
 
   const onSubmit = async (data: z.infer<typeof FormSchema>) => {
-    
+    try {
+      const response = await fetch(`/api/products/${product_id}`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(data),
+      });
+  
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+  
+      const text = await response.text();
+      if (!text) {
+        throw new Error("Empty response from server");
+      }
+
+      const updatedProduct = JSON.parse(text);
+      toast({
+        title: "Successfully updated the value:",
+        description: (
+          <pre className="mt-2 w-[340px] rounded-md bg-slate-950 p-4">
+            <code className="text-white">{JSON.stringify(data, null, 2)}</code>
+          </pre>
+        ),
+      });
+      console.log("Updated product:", updatedProduct);
+      closeDialog();
+      window.location.reload();
+
+    } catch (error) {
+      console.error("Updating product failed:", error);
+      toast({
+        title: "Update failed",
+        description: "There was an error updating the product. Please try again."
+      });
+    }
   };
 
   const toSentenceCase = (str: string) => {
@@ -125,7 +162,7 @@ const Edit_Card = ({ open, setOpen, product_id }: Product_CardProps) => {
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
-      <DialogContent onInteractOutside={(e) => e.preventDefault()}>
+      <DialogContent onInteractOutside={(e) => e.preventDefault()} aria-description="Edit product details form" aria-des>
         <DialogHeader>
           <DialogTitle>Edit Product</DialogTitle>
         </DialogHeader>
@@ -137,7 +174,7 @@ const Edit_Card = ({ open, setOpen, product_id }: Product_CardProps) => {
             >
               <FormField
                 control={form.control}
-                name="image"
+                name="image_url"
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel>Image</FormLabel>
@@ -274,16 +311,18 @@ const Edit_Card = ({ open, setOpen, product_id }: Product_CardProps) => {
                   </FormItem>
                 )}
               />
-
-              <Button
-                variant={"outline"}
-                onClick={() => {
-                  setOpen(false);
-                }}
-              >
-                Cancel
-              </Button>
-              <Button type="submit">Edit</Button>
+              <div className="flex justify-around">
+                <Button
+                  variant={"outline"}
+                  onClick={() => {
+                    setOpen(false);
+                  }}
+                  className="w-1/3"
+                >
+                  Cancel
+                </Button>
+                <Button type="submit" className="w-1/3">Edit</Button>
+              </div>
             </form>
           </Form>
         </ScrollArea>

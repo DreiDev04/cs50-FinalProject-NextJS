@@ -3,8 +3,6 @@ import { NextResponse } from "next/server";
 
 export default withAuth(
   async (req) => {
-    // console.log("PATH: ",req.nextUrl.pathname);
-    // console.log("TOKEN: ", req.nextauth.token?.role);
 
     if (
       req.nextUrl.pathname.startsWith("/admin") &&

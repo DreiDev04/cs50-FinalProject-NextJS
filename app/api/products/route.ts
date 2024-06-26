@@ -43,7 +43,7 @@ export const GET = async () => {
 
     const collection = db.collection('products');
 
-    const products = await collection.find().toArray();
+    const products = await collection.find().sort({ _id: -1 }).toArray();
 
     // console.log("Products fetched successfully: ", products);
 

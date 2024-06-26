@@ -47,7 +47,7 @@ const Nav: React.FC = () => {
               <Link href="/store">Store</Link>
             </Button>
             <Button asChild variant="link">
-              <Link href="/favorites">Favorites</Link>
+              <Link href="/search">Search</Link>
             </Button>
             {session?.user?.role === "admin" && (
               <Button asChild variant="link">
@@ -99,7 +99,7 @@ const Nav: React.FC = () => {
                 </DropdownMenuLabel>
                 <DropdownMenuSeparator />
                 <DropdownMenuItem>
-                  <Link href="/home">Home</Link>
+                  <Link href="/">Home</Link>
                 </DropdownMenuItem>
                 <DropdownMenuItem>
                   <Link href="/store">Store</Link>
@@ -108,7 +108,7 @@ const Nav: React.FC = () => {
                   <Link href="/contact">Contact</Link>
                 </DropdownMenuItem>
                 <DropdownMenuItem>
-                  <Link href="/favorites">Favorites</Link>
+                  <Link href="/search">Search</Link>
                 </DropdownMenuItem>
                 {session?.user?.role === "admin" && (
                   <DropdownMenuItem>

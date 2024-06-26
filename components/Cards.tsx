@@ -6,23 +6,47 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import { IProduct } from "@/models/Product";
+import Image from "next/image";
 
-const Cards = () => {
+type CardProps = {
+  product: IProduct;
+};
+
+const Cards = ({ product }: CardProps) => {
   return (
-    <div className="w-[350px]">
-      <Card>
-        <CardHeader>
-          <CardTitle>Card Title</CardTitle>
-          <CardDescription>Card Description</CardDescription>
-        </CardHeader>
-        <CardContent>
-          <p>Card Content</p>
-        </CardContent>
-        <CardFooter>
-          <p>Card Footer</p>
-        </CardFooter>
-      </Card>
-    </div>
+    <Card className="min-h-[350px]">
+      <CardContent className="container min-h-[200px] flex justify-center items-center">
+        <Image
+          src={product.image_url}
+          width={200}
+          height={200}
+          alt={product.product_name}
+          priority={true}
+        />
+      </CardContent>
+      <CardHeader>
+        <CardTitle>
+          {product.product_name}
+          <span className="  text-sm"> - {product.net_wt}</span>
+        </CardTitle>
+        <CardDescription className="font-bold text-lg ">
+          {product.category
+            .replace(/_/g, " ")
+            .toLowerCase()
+            .replace(/\b\w/g, (l) => l.toUpperCase())}
+        </CardDescription>
+        <CardDescription>
+          {product.sub_category
+            .replace(/_/g, " ")
+            .toLowerCase()
+            .replace(/\b\w/g, (l) => l.toUpperCase())}
+        </CardDescription>
+      </CardHeader>
+      <CardFooter>
+        <p className="text-primary">₱{product.selling_price}</p>
+      </CardFooter>
+    </Card>
   );
 };
 

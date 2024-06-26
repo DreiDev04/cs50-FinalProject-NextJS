@@ -46,7 +46,7 @@ const Footer = () => {
             Instagram
           </a>
         </div>
-        <p className="text-sm">&copy; {new Date().getFullYear()} Charina's Store. All rights reserved.</p>
+        <p className="text-sm">&copy; {new Date().getFullYear()} Charina&apos;s Store. All rights reserved.</p>
       </div>
     </footer>
   );

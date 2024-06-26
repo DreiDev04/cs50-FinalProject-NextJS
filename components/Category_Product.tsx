@@ -1,5 +1,11 @@
 import React from "react";
-import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
+import {
+  Card,
+  CardContent,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 import { FaSquareArrowUpRight } from "react-icons/fa6";
 import Link from "next/link";
 
@@ -23,12 +29,18 @@ const Category_Product = ({ category, subCategories }: CategoryProps) => {
       <div className="grid md:grid-cols-5 grid-cols-1 gap-5">
         {subCategories.map((subCategory) => {
           return (
-            <Card className="min-w-[200px] h-[180px] flex flex-col text-center justify-center">
+            <Card
+              key={subCategory}
+              className="min-w-[200px] h-[180px] flex flex-col text-center justify-center"
+            >
               <CardHeader>
                 <CardTitle>{formatCategory(subCategory)}</CardTitle>
               </CardHeader>
               <CardContent className="text-center text-sm underline">
-                <Link href={`/products/${category}/${subCategory}`} className="flex justify-center items-center">
+                <Link
+                  href={`/products/${category}/${subCategory}`}
+                  className="flex justify-center items-center"
+                >
                   View Products
                   <span className="ml-2">
                     <FaSquareArrowUpRight />

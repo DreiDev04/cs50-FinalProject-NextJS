@@ -30,7 +30,7 @@ const Nav: React.FC = () => {
           alt="Tindahan Logo"
         />
         <span className="self-center text-2xl font-semibold whitespace-nowrap dark:text-primary text-primary">
-          Charina's Store
+          Charina&apos;s Store
         </span>
       </Link>
       {/*DESKTOP NAVIGATION*/}

@@ -19,7 +19,7 @@ export default function Home() {
       </div>
       <div className=" flex flex-col gap-5 justify-center md:px-9">
         <h1 className="hero_text text-end mx-auto">
-          <span className="block">Welcome to Charina's Store:</span>{" "}
+          <span className="block">Welcome to Charina&apos;s Store:</span>
           <span className="gradient_text">
             Your Ultimate Destination for the Best Prices!
           </span>

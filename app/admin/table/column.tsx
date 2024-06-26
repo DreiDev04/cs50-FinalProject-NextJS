@@ -1,3 +1,4 @@
+"use client"
 import { IProduct } from "@/models/Product";
 import { ColumnDef } from "@tanstack/react-table";
 import { Button } from "@/components/ui/button";

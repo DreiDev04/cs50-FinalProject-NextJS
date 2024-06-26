@@ -1,3 +1,4 @@
+"use client";
 import {
   Dialog,
   DialogContent,
@@ -19,9 +20,6 @@ import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { useEffect, useState } from "react";
-import { uploadProduct } from "@/app/admin/actions";
-import SubmitFormButton from "@/components/SubmitFormButton";
-import { revalidatePath } from "next/cache";
 import {
   Select,
   SelectContent,

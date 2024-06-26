@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, Suspense } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
@@ -11,7 +11,6 @@ import { Input } from "@/components/ui/input";
 import { useSearchParams, usePathname, useRouter } from "next/navigation";
 import Queried from "@/components/Queried";
 import { fetchQuery } from "@/app/search/access";
-import { revalidatePath } from "next/cache";
 import { IProduct } from "@/models/Product";
 
 const FormSchema = z.object({
@@ -47,16 +46,18 @@ const Search = () => {
       params.delete("q");
     }
     replace(`${pathname}?${params.toString()}`);
-    
   }
+
   return (
     <div className="md:min-h-screen">
       <header className="bg-primary h-16 flex justify-between items-center container">
-        <h1 className="text-2xl font-extrabold text-background hidden md:block">Search Page</h1>
+        <h1 className="text-2xl font-extrabold text-background hidden md:block">
+          Search Page
+        </h1>
         <Form {...form}>
           <form
             onSubmit={form.handleSubmit(onSubmit)}
-            className=" flex justify-center items-center gap-3"
+            className="flex justify-center items-center gap-3"
           >
             <FormField
               control={form.control}
@@ -91,4 +92,10 @@ const Search = () => {
   );
 };
 
-export default Search;
+export default function SearchPageWrapper() {
+  return (
+    <Suspense fallback={<div>Loading...</div>}>
+      <Search />
+    </Suspense>
+  );
+}

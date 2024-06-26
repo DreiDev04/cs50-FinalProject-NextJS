@@ -12,7 +12,6 @@ const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
   title: "Charina Store",
-  description: "Your ultimate destination for best prices",
 };
 
 export default function RootLayout({
@@ -21,8 +20,8 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" suppressHydrationWarning={true}>
-      <body className={inter.className} suppressHydrationWarning={true}>
+    <html lang="en" >
+      <body className={inter.className}>
         <ThemeProvider
           attribute="class"
           defaultTheme="system"

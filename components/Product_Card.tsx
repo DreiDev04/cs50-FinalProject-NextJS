@@ -62,9 +62,7 @@ const FormSchema = z.object({
   sub_category: z.string().min(1, { message: "Please select a category" }),
   net_wt: z.string().min(1, { message: "Please enter the net weight" }),
   price: z.string().optional(),
-  selling_price: z
-    .string()
-    .min(1, { message: "Please enter the selling price" }),
+  selling_price: z.string().optional(),
 });
 
 const Product_Card = ({ open, setOpen, button_desc }: Product_CardProps) => {
@@ -82,8 +80,8 @@ const Product_Card = ({ open, setOpen, button_desc }: Product_CardProps) => {
       category: "",
       sub_category: "",
       net_wt: "",
-      price: "",
-      selling_price: "",
+      price: "0",
+      selling_price: "0",
     },
   });
 
@@ -135,7 +133,7 @@ const Product_Card = ({ open, setOpen, button_desc }: Product_CardProps) => {
       });
 
       closeDialog();
-      window.location.reload();
+      // window.location.reload();
     } catch (error) {
       console.error("Failed to submit form: ", error);
     }
@@ -247,7 +245,10 @@ const Product_Card = ({ open, setOpen, button_desc }: Product_CardProps) => {
                     <FormItem>
                       <FormLabel>Sub Category</FormLabel>
                       <FormControl>
-                        <Select  onValueChange={field.onChange} defaultValue={field.value}>
+                        <Select
+                          onValueChange={field.onChange}
+                          defaultValue={field.value}
+                        >
                           <SelectTrigger>
                             <SelectValue placeholder="Select Sub Category" />
                           </SelectTrigger>

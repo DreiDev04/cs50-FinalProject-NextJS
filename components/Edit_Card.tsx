@@ -47,9 +47,7 @@ const FormSchema = z.object({
   sub_category: z.string().min(1, { message: "Please select a category" }),
   net_wt: z.string().min(1, { message: "Please enter the net weight" }),
   price: z.string().min(1, { message: "Please enter the price" }),
-  selling_price: z
-    .string()
-    .min(1, { message: "Please enter the selling price" }),
+  selling_price: z.string().optional(),
 });
 
 const Edit_Card = ({ open, setOpen, product_id }: Product_CardProps) => {
@@ -66,8 +64,8 @@ const Edit_Card = ({ open, setOpen, product_id }: Product_CardProps) => {
       category: "",
       sub_category: "",
       net_wt: "",
-      price: "",
-      selling_price: "",
+      price: "0",
+      selling_price: "0",
     },
   });
 
@@ -113,11 +111,11 @@ const Edit_Card = ({ open, setOpen, product_id }: Product_CardProps) => {
         },
         body: JSON.stringify(data),
       });
-  
+
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`);
       }
-  
+
       const text = await response.text();
       if (!text) {
         throw new Error("Empty response from server");
@@ -135,12 +133,12 @@ const Edit_Card = ({ open, setOpen, product_id }: Product_CardProps) => {
       console.log("Updated product:", updatedProduct);
       closeDialog();
       window.location.reload();
-
     } catch (error) {
       console.error("Updating product failed:", error);
       toast({
         title: "Update failed",
-        description: "There was an error updating the product. Please try again."
+        description:
+          "There was an error updating the product. Please try again.",
       });
     }
   };
@@ -160,7 +158,11 @@ const Edit_Card = ({ open, setOpen, product_id }: Product_CardProps) => {
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
-      <DialogContent onInteractOutside={(e) => e.preventDefault()} aria-description="Edit product details form" aria-des>
+      <DialogContent
+        onInteractOutside={(e) => e.preventDefault()}
+        aria-description="Edit product details form"
+        aria-des
+      >
         <DialogHeader>
           <DialogTitle>Edit Product</DialogTitle>
         </DialogHeader>
@@ -319,7 +321,9 @@ const Edit_Card = ({ open, setOpen, product_id }: Product_CardProps) => {
                 >
                   Cancel
                 </Button>
-                <Button type="submit" className="w-1/3">Edit</Button>
+                <Button type="submit" className="w-1/3">
+                  Edit
+                </Button>
               </div>
             </form>
           </Form>

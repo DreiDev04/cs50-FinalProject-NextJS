@@ -3,7 +3,6 @@ import { NextResponse } from "next/server";
 
 export default withAuth(
   async (req) => {
-
     if (
       req.nextUrl.pathname.startsWith("/admin") &&
       req.nextauth.token?.role !== "admin"
@@ -20,4 +19,4 @@ export default withAuth(
   }
 );
 
-export const config = { matcher: ["/admin", ] };
+export const config = { matcher: ["/admin", "/search"] };

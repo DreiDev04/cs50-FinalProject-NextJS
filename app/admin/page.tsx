@@ -56,9 +56,11 @@ const Admin: React.FC = () => {
   return (
     <div className="md:min-h-screen">
       <div className="container">
-        <Button variant="default" onClick={() => setOpen((prev) => !prev)}>
-          Add Product
-        </Button>
+        <div className="mt-10 md:flex md:justify-end ">
+          <Button variant="default" onClick={() => setOpen((prev) => !prev)} className="w-full md:w-min">
+            Add Product
+          </Button>
+        </div>
 
         <Product_Card open={open} setOpen={setOpen} button_desc="Add" />
         <DataTable columns={columns} data={datas} />

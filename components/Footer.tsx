@@ -10,17 +10,17 @@ const Footer = () => {
           <Link href="/" passHref>
             <span className="hover:underline cursor-pointer">Home</span>
           </Link>
-          <Link href="/about" passHref>
-            <span className="hover:underline cursor-pointer">About Us</span>
+          <Link href="/store" passHref>
+            <span className="hover:underline cursor-pointer">Store</span>
           </Link>
-          <Link href="/services" passHref>
-            <span className="hover:underline cursor-pointer">Services</span>
+          <Link href="/search" passHref>
+            <span className="hover:underline cursor-pointer">Search</span>
           </Link>
-          <Link href="/contact" passHref>
+          {/* <Link href="/contact" passHref>
             <span className="hover:underline cursor-pointer">Contact</span>
-          </Link>
+          </Link> */}
         </div>
-        <div className="flex space-x-4 mb-4">
+        {/* <div className="flex space-x-4 mb-4">
           <a
             href="https://www.facebook.com"
             target="_blank"
@@ -45,7 +45,7 @@ const Footer = () => {
           >
             Instagram
           </a>
-        </div>
+        </div> */}
         <p className="text-sm">&copy; {new Date().getFullYear()} Charina&apos;s Store. All rights reserved.</p>
       </div>
     </footer>

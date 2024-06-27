@@ -16,9 +16,7 @@ import { useSession } from "next-auth/react";
 
 const Nav: React.FC = () => {
   const isLogged = true;
-  const {data: session} = useSession();
-
-
+  const { data: session } = useSession();
 
   return (
     <nav className="bg-secondary dark:bg-background flex gap-2 flex-center justify-between w-full p-5 outline outline-1 ">
@@ -40,9 +38,9 @@ const Nav: React.FC = () => {
             <Button asChild variant="link">
               <Link href="/">Home</Link>
             </Button>
-            <Button asChild variant="link">
+            {/* <Button asChild variant="link">
               <Link href="/contact">Contact</Link>
-            </Button>
+            </Button> */}
             <Button asChild variant="link">
               <Link href="/store">Store</Link>
             </Button>
@@ -51,22 +49,20 @@ const Nav: React.FC = () => {
             </Button>
             {session?.user?.role === "admin" && (
               <Button asChild variant="link">
-              <Link href="/admin">Admin</Link>
-            </Button>
+                <Link href="/admin">Admin</Link>
+              </Button>
             )}
             <Button variant="outline">
               <Link href={"/api/auth/signout?callbackUrl=/"}>Sign Out</Link>
             </Button>
-            <Link href="/profile">
-              <Avatar>
-                {session?.user?.image ? (
-                  <AvatarImage src={session?.user?.image} />
-                ) : (
-                  <AvatarImage src="/placeholders/Profile_avatar_placeholder_large.png" />
-                )}
-                <AvatarFallback>CN</AvatarFallback>
-              </Avatar>
-            </Link>
+            <Avatar>
+              {session?.user?.image ? (
+                <AvatarImage src={session?.user?.image} />
+              ) : (
+                <AvatarImage src="/placeholders/Profile_avatar_placeholder_large.png" />
+              )}
+              <AvatarFallback>C</AvatarFallback>
+            </Avatar>
           </div>
         ) : (
           <>
@@ -85,7 +81,7 @@ const Nav: React.FC = () => {
             <DropdownMenu>
               <DropdownMenuTrigger>
                 <Avatar>
-                  {session?.user?.image  ? (
+                  {session?.user?.image ? (
                     <AvatarImage src={session?.user?.image} />
                   ) : (
                     <AvatarImage src="/placeholders/Profile_avatar_placeholder_large.png" />
@@ -94,9 +90,7 @@ const Nav: React.FC = () => {
                 </Avatar>
               </DropdownMenuTrigger>
               <DropdownMenuContent>
-                <DropdownMenuLabel>
-                  <Link href="/account">My Account</Link>
-                </DropdownMenuLabel>
+                <DropdownMenuLabel>My Account</DropdownMenuLabel>
                 <DropdownMenuSeparator />
                 <DropdownMenuItem>
                   <Link href="/">Home</Link>
@@ -104,9 +98,9 @@ const Nav: React.FC = () => {
                 <DropdownMenuItem>
                   <Link href="/store">Store</Link>
                 </DropdownMenuItem>
-                <DropdownMenuItem>
+                {/* <DropdownMenuItem>
                   <Link href="/contact">Contact</Link>
-                </DropdownMenuItem>
+                </DropdownMenuItem> */}
                 <DropdownMenuItem>
                   <Link href="/search">Search</Link>
                 </DropdownMenuItem>
@@ -116,7 +110,7 @@ const Nav: React.FC = () => {
                   </DropdownMenuItem>
                 )}
                 <DropdownMenuItem>
-                  <Link href="/">Sign Out</Link>
+                  <Link href="/api/auth/signout?callbackUrl=/">Sign Out</Link>
                 </DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>
@@ -124,7 +118,7 @@ const Nav: React.FC = () => {
         ) : (
           <>
             <Button>
-              <Mail className="mr-2 h-4 w-4" /> 
+              <Mail className="mr-2 h-4 w-4" />
               <Link href={"/api/auth/signin"}>Login</Link>
             </Button>
           </>

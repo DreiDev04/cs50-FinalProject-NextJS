@@ -2,9 +2,10 @@
 import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
+import { useSession } from "next-auth/react";
 
 export default function Home() {
-  const isLogged = false;
+  const {data: session} = useSession();
 
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 px-14 md:px-20 h-screen">
@@ -29,7 +30,7 @@ export default function Home() {
         </p>
         <br />
         <div className="self-end">
-          {isLogged ? (
+          {session ? (
             <Button variant={"default"}>
               <Link href="/store">Go to Store</Link>
             </Button>

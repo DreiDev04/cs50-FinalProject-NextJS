@@ -9,6 +9,10 @@ export default withAuth(
     ) {
       return new NextResponse("Unauthorized", { status: 401 });
     }
+    
+    if (req.nextUrl.pathname.startsWith("/search") && !req.nextauth.token) {
+      return new NextResponse("Unauthorized", { status: 401 });
+    }
 
     return NextResponse.next();
   },

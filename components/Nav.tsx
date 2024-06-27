@@ -32,6 +32,7 @@ const Nav: React.FC = () => {
         </span>
       </Link>
       {/*DESKTOP NAVIGATION*/}
+
       <div className="sm:flex hidden">
         {session ? (
           <div className="flex gap-3 md:gap-5">
@@ -66,6 +67,15 @@ const Nav: React.FC = () => {
           </div>
         ) : (
           <>
+            <Button asChild variant="link">
+              <Link href="/">Home</Link>
+            </Button>
+            {/* <Button asChild variant="link">
+              <Link href="/contact">Contact</Link>
+            </Button> */}
+            <Button asChild variant="link">
+              <Link href="/store">Store</Link>
+            </Button>
             <Button>
               <Mail className="mr-2 h-4 w-4" />
               <Link href={"/api/auth/signin"}>Login with Email</Link>

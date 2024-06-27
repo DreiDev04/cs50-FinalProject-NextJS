@@ -28,6 +28,15 @@ const Category_Product = ({ category, subCategories }: CategoryProps) => {
       </h2>
       <div className="grid md:grid-cols-5 grid-cols-1 gap-5">
         {subCategories.map((subCategory) => {
+          subCategory = subCategory
+            .replace(/_/g, " ")
+            .toLowerCase()
+            .replace(/\b\w/g, (l) => l.toUpperCase());
+          category = category
+            .replace(/_/g, " ")
+            .toLowerCase()
+            .replace(/\b\w/g, (l) => l.toUpperCase());
+
           return (
             <Card
               key={subCategory}
@@ -38,7 +47,7 @@ const Category_Product = ({ category, subCategories }: CategoryProps) => {
               </CardHeader>
               <CardContent className="text-center text-sm underline">
                 <Link
-                  href={`/products/${category}/${subCategory}`}
+                  href={`/search?q=${subCategory}`}
                   className="flex justify-center items-center"
                 >
                   View Products

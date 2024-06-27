@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, Suspense } from "react";
+import { useState, Suspense, useEffect } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
@@ -24,6 +24,7 @@ const Search = () => {
   const pathname = usePathname();
   const { replace } = useRouter();
   const [products, setProducts] = useState<IProduct[]>([]);
+  const [message, setMessage] = useState<string>("");
 
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
@@ -31,6 +32,13 @@ const Search = () => {
       query: "",
     },
   });
+  useEffect(() => {
+    const query = searchParams.get("q");
+    if (query) {
+      form.setValue("query", query);
+      onSubmit({ query });
+    }
+  }, []);
 
   async function onSubmit(data: z.infer<typeof FormSchema>) {
     console.log("data: ", data);
@@ -39,7 +47,15 @@ const Search = () => {
       params.set("q", data.query);
       const res = await fetchQuery(data.query);
       console.log("Result: ", res);
-      setProducts(res);
+      // setProducts(res);
+
+      if (res && res.length > 0) {
+        setProducts(res);
+        setMessage("");
+      } else {
+        setProducts([]);
+        setMessage("No products found");
+      }
 
       // revalidatePath(pathname);
     } else {

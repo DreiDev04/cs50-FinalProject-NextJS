@@ -30,6 +30,7 @@ import {
 } from "@/components/ui/select";
 
 import { categories } from "@/components/categories";
+import { Button } from "./ui/button";
 
 type CategoryKey = keyof typeof categories;
 
@@ -318,6 +319,15 @@ const Product_Card = ({ open, setOpen, button_desc }: Product_CardProps) => {
                 )}
               />
               <SubmitFormButton button_desc={button_desc} />
+              <Button
+                variant="outline"
+                className="w-full"
+                onClick={() => {
+                  closeDialog();
+                }}
+              >
+                Cancel
+              </Button>
             </form>
           </Form>
         </ScrollArea>

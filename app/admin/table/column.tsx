@@ -2,30 +2,14 @@
 import { IProduct } from "@/models/Product";
 import { ColumnDef } from "@tanstack/react-table";
 import { Button } from "@/components/ui/button";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-  DialogFooter,
-} from "@/components/ui/dialog";
-
 import { ArrowUpDown, MoreHorizontal } from "lucide-react";
-import { useState } from "react";
-import Edit_Card from "@/components/Edit_Card";
 import { ActionsCell } from "@/app/admin/table/ActionsCell";
 
 export const columns: ColumnDef<IProduct>[] = [
+  {
+    id: "actions",
+    cell: ({ row }) => <ActionsCell product={row.original} />,
+  },
   {
     accessorKey: "product_name",
     header: ({ column }) => {
@@ -117,8 +101,5 @@ export const columns: ColumnDef<IProduct>[] = [
       );
     },
   },
-  {
-    id: "actions",
-    cell: ({ row }) => <ActionsCell product={row.original} />,
-  },
+  
 ];

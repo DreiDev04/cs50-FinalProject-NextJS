@@ -318,6 +318,7 @@ const Edit_Card = ({ open, setOpen, product_id }: Product_CardProps) => {
                     setOpen(false);
                   }}
                   className="w-1/3"
+                  type="reset"
                 >
                   Cancel
                 </Button>

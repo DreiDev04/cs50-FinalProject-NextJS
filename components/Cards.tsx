@@ -24,7 +24,8 @@ const Cards = ({ product }: CardProps) => {
     .replace(/\b\w/g, (l) => l.toUpperCase());
 
   return (
-    <Card className="max-h-[400px]  min-h-[400px] ">
+    <Card className="max-h-[400px]  min-h-[400px] flex flex-col justify-between">
+      <div>
         <CardContent className="container min-h-[225px] flex justify-center items-center">
           <Image
             src={product.image_url}
@@ -44,9 +45,10 @@ const Cards = ({ product }: CardProps) => {
             <p className=" text-xs font-light">{product.sub_category}</p>
           </CardDescription>
         </CardHeader>
-        <CardFooter className="px-4">
-          <p className="text-primary">₱{product.selling_price}</p>
-        </CardFooter>
+      </div>
+      <CardFooter className="px-4">
+        <p className="text-primary">₱{product.selling_price}</p>
+      </CardFooter>
     </Card>
   );
 };

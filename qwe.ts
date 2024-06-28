@@ -4,6 +4,8 @@ import { NextResponse } from "next/server";
 // export default withAuth(
 //   // function middleware(req: NextRequestWithAuth) {
 
+
+
 //   //   return NextResponse.next();
 //   // },
 //   {
@@ -20,8 +22,6 @@ import { NextResponse } from "next/server";
 
 export default withAuth(
   function middleware(req: NextRequestWithAuth) {
-    console.log("Middleware: ", req.nextUrl.pathname);
-    console.log("Middleware: ", req.nextauth.token);
 
     if (
       req.nextUrl.pathname.startsWith("/admin") &&
@@ -37,11 +37,8 @@ export default withAuth(
   },
   {
     callbacks: {
-      authorized: ({ req, token }) => {
-        if (req.nextUrl.pathname === "/admin") {
-          return token?.role === "admin";
-        }
-        return Boolean(token);
+      authorized: ({ token }) => {
+        return !!token; 
       },
     },
   }

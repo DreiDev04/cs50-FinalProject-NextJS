@@ -4,7 +4,6 @@ import { useState, Suspense, useEffect } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
-
 import { Button } from "@/components/ui/button";
 import { Form, FormControl, FormField, FormItem } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
@@ -12,6 +11,8 @@ import { useSearchParams, usePathname, useRouter } from "next/navigation";
 import Queried from "@/components/Queried";
 import { fetchQuery } from "@/app/search/access";
 import { IProduct } from "@/models/Product";
+import { useSession } from "next-auth/react";
+import Link from "next/link";
 
 const FormSchema = z.object({
   query: z.string().min(1, {
@@ -20,6 +21,7 @@ const FormSchema = z.object({
 });
 
 const Search = () => {
+  const { data: session, status } = useSession();
   const searchParams = useSearchParams();
   const pathname = usePathname();
   const { replace } = useRouter();
@@ -62,6 +64,23 @@ const Search = () => {
       params.delete("q");
     }
     replace(`${pathname}?${params.toString()}`);
+  }
+  if (status === "loading") {
+    return (
+      <div className="md:min-h-screen grid place-content-center">
+        Loading...
+      </div>
+    );
+  }
+  if (!session) {
+    return (
+      <div className="md:min-h-screen grid place-content-center">
+        <h1>Please sign in to access this page.</h1>
+        <Button>
+          <Link href="/api/auth/signin">Sign in</Link>
+        </Button>
+      </div>
+    );
   }
 
   return (

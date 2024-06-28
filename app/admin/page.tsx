@@ -5,10 +5,13 @@ import { Button } from "@/components/ui/button";
 import { useState, useEffect } from "react";
 import { columns } from "@/app/admin/table/column";
 import { DataTable } from "@/app/admin/table/data-table";
+import { useSession } from "next-auth/react";
+import Link from "next/link";
 
 const Admin: React.FC = () => {
   const [open, setOpen] = useState(false);
   const [datas, setdatas] = useState([]);
+  const { data: session, status } = useSession();
 
   useEffect(() => {
     const fetchData = async (): Promise<void> => {
@@ -49,15 +52,42 @@ const Admin: React.FC = () => {
       setdatas(formatedData);
     };
     fetchData();
-    // const intervalId = setInterval(fetchData, 10000);
-    // return () => clearInterval(intervalId);
   }, []);
+
+  if (status === "loading") {
+    return (
+      <div className="md:min-h-screen grid place-content-center">
+        Loading...
+      </div>
+    );
+  }
+  if (!session) {
+    return (
+      <div className="md:min-h-screen grid place-content-center">
+        <h1>Please sign in to access this page.</h1>
+        <Button>
+          <Link href="/api/auth/signin">Sign in</Link>
+        </Button>
+      </div>
+    );
+  }
+  if (session && session?.user?.role !== "admin") {
+    return (
+      <div className="md:min-h-screen grid place-content-center">
+        <h1>Unauthorize</h1>
+      </div>
+    );
+  }
 
   return (
     <div className="md:min-h-screen">
       <div className="container">
         <div className="mt-10 md:flex md:justify-end ">
-          <Button variant="default" onClick={() => setOpen((prev) => !prev)} className="w-full md:w-min">
+          <Button
+            variant="default"
+            onClick={() => setOpen((prev) => !prev)}
+            className="w-full md:w-min"
+          >
             Add Product
           </Button>
         </div>

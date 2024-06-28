@@ -1,24 +1,28 @@
-import { withAuth } from "next-auth/middleware";
+import { withAuth, NextRequestWithAuth } from "next-auth/middleware";
 import { NextResponse } from "next/server";
 
 export default withAuth(
-  async (req) => {
+  function middleware(req: NextRequestWithAuth) {
+    console.log("Middleware: ", req.nextUrl.pathname);
+    console.log("Middleware: ", req.nextauth.token);
+
     if (
       req.nextUrl.pathname.startsWith("/admin") &&
       req.nextauth.token?.role !== "admin"
     ) {
       return new NextResponse("Unauthorized", { status: 401 });
     }
-    
     if (req.nextUrl.pathname.startsWith("/search") && !req.nextauth.token) {
-      return new NextResponse("Unauthorized", { status: 401 });
+      return new NextResponse("Please sign in", { status: 401 });
     }
 
     return NextResponse.next();
   },
   {
     callbacks: {
-      authorized: ({ token }) => !!token,
+      authorized: ({ token }) => {
+        return !!token; // Return a boolean indicating if the token exists
+      },
     },
   }
 );

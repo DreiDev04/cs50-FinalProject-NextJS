@@ -1,7 +1,4 @@
 import GoogleProvider from "next-auth/providers/google";
-import { GoogleProfile } from "next-auth/providers/google";
-import { connectToDatabase } from "@/lib/mongoDB";
-import User, { IUser } from "@/models/User";
 import { MongoDBAdapter } from "@auth/mongodb-adapter";
 import clientPromise from "@/lib/db";
 
@@ -21,7 +18,7 @@ export const options: any = {
       },
     }),
   ],
-  adapter: MongoDBAdapter(clientPromise) as any,
+  adapter: MongoDBAdapter(clientPromise),
   session: {
     strategy: "jwt",
   },

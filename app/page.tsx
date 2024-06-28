@@ -31,11 +31,11 @@ export default function Home() {
         <br />
         <div className="self-end">
           {session ? (
-            <Button variant={"default"}>
+            <Button variant={"default"} asChild>
               <Link href="/store">Go to Store</Link>
             </Button>
           ) : (
-            <Button variant={"default"}>
+            <Button variant={"default"} asChild>
               <Link href="/api/auth/signin">Get Started</Link>
             </Button>
           )}

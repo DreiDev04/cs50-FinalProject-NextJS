@@ -66,7 +66,9 @@
   .gradient_text{
     @apply bg-gradient-to-tr from-emerald-300 to-emerald-900 bg-clip-text text-transparent
   }
-
+  .glassmorphism{
+    @apply h-full w-full bg-foreground rounded-md bg-clip-padding backdrop-filter backdrop-blur-md bg-opacity-10 border border-gray-100
+  }
 }
 *{
   /* outline: red 1px solid; */

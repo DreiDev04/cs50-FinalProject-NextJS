@@ -57,11 +57,6 @@ const StorePage: React.FC = () => {
     <div className="md:min-h-screen">
       <div className="container">
         <All_Products products={products} />
-        {/* {
-          Object.keys(categories).map((category) => (
-            <Category_Product key={category} category={category} />
-          ))
-        } */}
         {
           Object.entries(categories).map(([category, subCategories]) => (
             <Category_Product key={category} category={category} subCategories={subCategories} />

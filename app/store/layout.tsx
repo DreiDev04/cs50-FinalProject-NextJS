@@ -24,7 +24,7 @@ const StoreLayout: React.FC<StoreLayoutProps> = ({ children }) => {
         />
         <h1 className="text-2xl font-semibold">Welcome to Charina's Store</h1>
         <div className="my-5 flex gap-2 ">
-          <Button>
+          <Button asChild>
             {session?.user ? (
               <Link href="/search">Search Product</Link>
             ):(

@@ -67,16 +67,16 @@ const Search = () => {
   }
   if (status === "loading") {
     return (
-      <div className="md:min-h-screen grid place-content-center">
+      <div className="min-h-screen grid place-content-center">
         Loading...
       </div>
     );
   }
   if (!session) {
     return (
-      <div className="md:min-h-screen grid place-content-center">
+      <div className="min-h-screen grid place-content-center">
         <h1>Please sign in to access this page.</h1>
-        <Button>
+        <Button asChild>
           <Link href="/api/auth/signin">Sign in</Link>
         </Button>
       </div>

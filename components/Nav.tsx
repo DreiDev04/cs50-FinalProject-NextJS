@@ -76,9 +76,11 @@ const Nav: React.FC = () => {
             <Button asChild variant="link">
               <Link href="/store">Store</Link>
             </Button>
-            <Button>
-              <Mail className="mr-2 h-4 w-4" />
-              <Link href={"/api/auth/signin"}>Login with Email</Link>
+            <Button asChild>
+              <Link href={"/api/auth/signin"} className="flex">
+                <Mail className="mr-2 h-4 w-4" />
+                Login with Email
+              </Link>
             </Button>
           </>
         )}
@@ -127,9 +129,11 @@ const Nav: React.FC = () => {
           </div>
         ) : (
           <>
-            <Button>
-              <Mail className="mr-2 h-4 w-4" />
-              <Link href={"/api/auth/signin"}>Login</Link>
+            <Button asChild>
+              <Link href={"/api/auth/signin"} className="flex">
+                <Mail className="mr-2 h-4 w-4" />
+                Login
+              </Link>
             </Button>
           </>
         )}

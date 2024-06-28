@@ -42,12 +42,12 @@ type Product_CardProps = {
 
 const FormSchema = z.object({
   image_url: z.string().optional(),
-  product_name: z.string().min(1, { message: "Please enter a product name" }),
-  category: z.string().min(1, { message: "Please select a sub category" }),
-  sub_category: z.string().min(1, { message: "Please select a category" }),
-  net_wt: z.string().min(1, { message: "Please enter the net weight" }),
-  price: z.string().min(1, { message: "Please enter the price" }),
-  selling_price: z.string().optional(),
+  product_name: z.string().optional(),
+  category: z.string().optional(),
+  sub_category: z.string().optional(),
+  net_wt: z.string().optional(),
+  price: z.union([z.string(), z.number()]).optional(),
+  selling_price: z.union([z.string(), z.number()]).optional(),
 });
 
 const Edit_Card = ({ open, setOpen, product_id }: Product_CardProps) => {
@@ -234,40 +234,40 @@ const Edit_Card = ({ open, setOpen, product_id }: Product_CardProps) => {
                   </FormItem>
                 )}
               />
-              {selectedCategory && (
-                <FormField
-                  control={form.control}
-                  name="sub_category"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Sub Category</FormLabel>
-                      <FormControl>
-                        <Select
-                          onValueChange={field.onChange}
-                          defaultValue={field.value}
-                          value={form.watch("sub_category")}
-                        >
-                          <SelectTrigger>
-                            <SelectValue placeholder="Select sub category" />
-                          </SelectTrigger>
-                          <SelectContent>
-                            {categories[selectedCategory as CategoryKey].map(
-                              (category) => (
-                                <SelectItem key={category} value={category}>
-                                  {toSentenceCase(
-                                    category.replace(/_/g, " ").toLowerCase()
-                                  )}
-                                </SelectItem>
-                              )
-                            )}
-                          </SelectContent>
-                        </Select>
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-              )}
+
+              <FormField
+                control={form.control}
+                name="sub_category"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Sub Category</FormLabel>
+                    <FormControl>
+                      <Select
+                        onValueChange={field.onChange}
+                        defaultValue={field.value}
+                        value={form.watch("sub_category")}
+                      >
+                        <SelectTrigger>
+                          <SelectValue placeholder="Select sub category" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          {categories[selectedCategory as CategoryKey].map(
+                            (category) => (
+                              <SelectItem key={category} value={category}>
+                                {toSentenceCase(
+                                  category.replace(/_/g, " ").toLowerCase()
+                                )}
+                              </SelectItem>
+                            )
+                          )}
+                        </SelectContent>
+                      </Select>
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+
               <FormField
                 control={form.control}
                 name="net_wt"

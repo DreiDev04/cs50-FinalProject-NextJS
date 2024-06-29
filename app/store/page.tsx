@@ -12,7 +12,7 @@ const StorePage: React.FC = () => {
 
   useEffect(() => {
     const fetchData = async (): Promise<void> => {
-      const res = await fetch("/api/products/limit", {
+      const res = await fetch("/api/products", {
         method: "GET",
       });
       const data = await res.json();
